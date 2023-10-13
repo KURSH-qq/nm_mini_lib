@@ -8,16 +8,16 @@ inline double mabs(double d) {
     else if (d >= 0) {
         return d;
     }
-    //return d;
 }
 
+/*
 inline double pow(double d, int p) {
     double result = d;
     for (int i = 0; i < p; i++) {
         result *= result;
     }
     return result;
-}
+}*/
 
 
 inline double max(double d1, double d2) {
@@ -88,10 +88,6 @@ DEsolution::DEsolution(unsigned int mod, double _E, int _p, int _steps, double _
     start();  
     
     make_table();   
-    
-    //std::cout << "ffff" << std::endl;
-    //print_table();
-    //print_results();
 }
 
 void DEsolution::start() {
@@ -126,9 +122,7 @@ void DEsolution::start() {
                 }
                 else {
                     Udata.push_back(0);
-                }
-                //Udata.push_back(solved_du(Xdata[i - 1] + h, ic));
-                
+                }               
                 i++;
             }
             else {
@@ -207,10 +201,8 @@ void DEsolution::make_table() {
         else {
             Subuv.push_back(0);
         }
-         
-        
     }   
-    
+    table.clear();
     table.push_back(I);
     table.push_back(Xdata);
     table.push_back(V1data);
@@ -282,6 +274,8 @@ void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr
     Xr = _Xr;
     h = _h;
     ic = _ic;
+    dublecate_count = 0;
+    div_count = 0;
     start();
     make_table();
 }
@@ -305,6 +299,8 @@ void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr
     h = _h;
     ic[0] = _ic1;
     ic[1] = _ic2;
+    dublecate_count = 0;
+    div_count = 0;
     start();
     make_table();
 }
@@ -332,14 +328,8 @@ SDEsolution::SDEsolution(unsigned int mod, double _E, int _p, int _steps, double
     Xr = _Xr;
     p1 = _p1;
     p2 = _p2;
-    start();
-    
+    start();  
     make_table();
-    
-    //print_table();
-    
-    //print_results();
-    
 
 }
 
@@ -440,6 +430,7 @@ void SDEsolution::make_table() {
     Subv1[0] = 0;
     Subv2[0] = 0;
     
+    table.clear();
     table.push_back(I);
     table.push_back(Xdata);
     table.push_back(V1data);
@@ -521,6 +512,8 @@ void SDEsolution::set_params(unsigned int _mod, double _E, int _steps, double _X
     ic = _ic;
     p1 = _p1;
     p2 = _p2;
+    dublicate_count = 0;
+    div_count = 0;
     start();
     make_table();
 }
@@ -544,6 +537,8 @@ void SDEsolution::set_params(unsigned int _mod, double _E, int _steps, double _X
     steps = _steps;
     Xr = _Xr;
     h = _h;
+    dublicate_count = 0;
+    div_count = 0;
     ic[0] = _ic1;
     ic[1] = _ic2;
     ic[2] = _ic3;

@@ -3,7 +3,7 @@
 #include <vector>
 
 inline double mabs(double d);
-inline double pow(double d, int p);
+//inline double pow(double d, int p);
 inline double max(double d1, double d2);
 inline double max(const std::vector<double> v);
 inline double min(const std::vector<double> v);

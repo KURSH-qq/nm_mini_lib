@@ -6,7 +6,6 @@
 #include <cmath>
 
 
-
 double right_part(double x = 0, double u = 0) {
     return -2.5 * u;
 }
@@ -33,29 +32,19 @@ double f3(double x = 0, double u = 0) {
     return f * u * u + u - u * u * u * sin(10*x);
 }
 
-
-
-
-
-/*
-std::vector<double> ic;
-std::vector<double> test;
-ic.push_back(0);
-ic.push_back(4);
-test = ic;
-test.push_back(1);
-double h = 0.001;
-double E = 0.001;
-
-SDEsolution sol2( 1, E, 2, 10,10, test, h, f1, f2, rk2,1,1);
-//DEsolution sol1(1,E,2, 200, 30 , ic, h, right_part, em, sd);
-//DEsolution sol1(0, E, 2, 200, 30, ic, h, right_part, rk2); */
-
 int main() {
-    std::vector<double> ic = { 0,4 };
+    std::vector<double> ic = { 0,4,1 };
     double h = 0.001;
     double E = 0.0001;
-    DEsolution sol1(1, E, 2, 200, 30, ic, h, f3, rk2);
-    sol1.print_table();
-    sol1.print_results();
+    //DEsolution sol1(1, E, 2, 200, 30, ic, h, f3, rk2);
+    SDEsolution sol2(1, E, 2, 10, 10, ic, h, f1, f2, rk2, 1, 1);
+    sol2.print_table();
+    sol2.print_results();
+    sol2.set_params(1, E, 11, 31, 0.001, 0, 4,1,1,1);
+    sol2.print_table();
+    sol2.print_results();
+    //std::cout << sol2.get_table().size() << std::endl;
+    //std::cout << sol2.get_table()[0].size() << std::endl;
+    //std::cout << sol2.get_names().size() << std::endl;
+    //std::cout << sol1.get_table()[0][20] << std:: endl;
 }
