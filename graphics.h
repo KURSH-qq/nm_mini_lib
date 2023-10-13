@@ -570,12 +570,20 @@ public:
             if (e.mouseWheelScroll.delta > 0)
             {
                 if (pixel_on_x < 500)
+                {
                     pixel_on_x *= 2;
+                    pos_o.x = last_pos.x + 2 * (pos_o.x - last_pos.x);
+                    pos_o.y = last_pos.y + 2 * (pos_o.y - last_pos.y);
+                }
             }
             else
             {
                 if (pixel_on_x > 40)
+                {
                     pixel_on_x /= 2;
+                    pos_o.x = last_pos.x + 0.5 * (pos_o.x - last_pos.x);
+                    pos_o.y = last_pos.y + 0.5 * (pos_o.y - last_pos.y);
+                }
             }
         }
 
