@@ -2,53 +2,60 @@
 #include "solution.h"
 #include "methoods.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <cmath>
 
-using namespace sf;
 
 
-double right_part(double x = 0, double u = 0) {// правая часть ДУ
+double right_part(double x = 0, double u = 0) {
     return -2.5 * u;
+}
+
+double rp1(double x = 0, double u = 0) {
+    return 1 / u;
+}
+
+double sd(double x, std::vector<double> ic) { 
+    
+    return ic[1] * exp(-2.5 * (x - ic[0]));
+}
+
+double f1(double x = 0, double v1 = 0, double v2 = 0, double p1 = 0, double p2 = 0) {
+    return v2;
+}
+
+double f2(double x = 0, double v2 = 0 ,double v1 = 0,double p1 = 0, double p2 = 0) {
+    return p1*v2 * v2 + p2*sin(v1);
+}
+
+double f3(double x = 0, double u = 0) {
+    double f = (log(x+1)) / (x*x+1);
+    return f * u * u + u - u * u * u * sin(10*x);
 }
 
 
 
 
-int main()
-{
-    double* ic{ new double[2] {0,1} };
 
+/*
+std::vector<double> ic;
+std::vector<double> test;
+ic.push_back(0);
+ic.push_back(4);
+test = ic;
+test.push_back(1);
+double h = 0.001;
+double E = 0.001;
 
+SDEsolution sol2( 1, E, 2, 10,10, test, h, f1, f2, rk2,1,1);
+//DEsolution sol1(1,E,2, 200, 30 , ic, h, right_part, em, sd);
+//DEsolution sol1(0, E, 2, 200, 30, ic, h, right_part, rk2); */
+
+int main() {
+    std::vector<double> ic = { 0,4 };
     double h = 0.001;
-
-    solution sol1(1,100, &ic[0], h, right_part, em); //порядок, количество шагов, начальные условия, шаг, правая часть, метод
-    sol1.start_with_le();
-    sol1.print();
-    
-    RenderWindow window(VideoMode(400, 400), L"Новый проект", Style::Default);
-
-    
-
-    window.setVerticalSyncEnabled(true);
-
-    CircleShape shape(100.f, 3);
-    shape.setPosition(100, 100);
-    shape.setFillColor(Color::Magenta);
-
-    while (window.isOpen())
-    {
-        Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == Event::Closed)
-                window.close();
-        }
-
-        window.clear(Color::Blue);
-        window.draw(shape);
-        window.display();
-    }
-
-    
-
-    return 0;
+    double E = 0.0001;
+    DEsolution sol1(1, E, 2, 200, 30, ic, h, f3, rk2);
+    sol1.print_table();
+    sol1.print_results();
 }
