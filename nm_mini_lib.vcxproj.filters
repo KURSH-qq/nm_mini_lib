@@ -32,5 +32,8 @@
     <ClInclude Include="methoods.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
