@@ -572,8 +572,9 @@ public:
                 if (pixel_on_x < 500)
                 {
                     pixel_on_x *= 2;
-                    pos_o.x = last_pos.x + 2 * (pos_o.x - last_pos.x);
-                    pos_o.y = last_pos.y + 2 * (pos_o.y - last_pos.y);
+
+                    pos_o.x += pos_o.x - e.mouseWheelScroll.x;
+                    pos_o.y += pos_o.y - e.mouseWheelScroll.y;
                 }
             }
             else
@@ -581,8 +582,8 @@ public:
                 if (pixel_on_x > 40)
                 {
                     pixel_on_x /= 2;
-                    pos_o.x = last_pos.x + 0.5 * (pos_o.x - last_pos.x);
-                    pos_o.y = last_pos.y + 0.5 * (pos_o.y - last_pos.y);
+                    pos_o.x = 0.5 * (pos_o.x + e.mouseWheelScroll.x);
+                    pos_o.y = 0.5 * (pos_o.y + e.mouseWheelScroll.y);
                 }
             }
         }
