@@ -206,6 +206,7 @@ public:
 
     void setData(std::vector<std::vector<double>> data)
     {
+        start_pos = 0;
         this->data = data;
     }
 
