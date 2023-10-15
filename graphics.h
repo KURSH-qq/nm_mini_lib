@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <ostream>
+#include <sstream> 
 
 
 class TextField : public sf::Transformable, public sf::Drawable
@@ -250,17 +252,19 @@ public:
             target.draw(text, states);
         }
 
+
         for (size_t i = 0; i < rows_show - 1; i++)
         {
             for (size_t j = 0; j < data[i].size(); j++)
             {
-                text.setString(std::to_string(data[i + start_pos][j]));
+                std::ostringstream sstream;
+                sstream << (data[i + start_pos][j]);
+                //std::cout << sstream.str() << '\n';
+                text.setString(sstream.str());
                 text.setPosition(pos.x + j * (size.x / names.size()) + 5, pos.y + (size.y / rows_show) * 1.5 - char_size / 2 + i * (size.y / rows_show));
                 target.draw(text, states);
             }
         }
-
-
     }
 
 

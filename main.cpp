@@ -59,7 +59,7 @@ const double p1 = 1, p2 = 1;
 int main()
 {
     std::vector<double> ic = { 0,4 };
-    DEsolution sol1(1, 0.0001, 2, 200, 30, ic, 0.001, right_part, rk2);
+    DEsolution sol1(1, 0.0001, 2, 200, 30, ic, 0.001, right_part, rk2, sd);
     DEsolution sol2(1, 0.0001, 2, 200, 30, ic, 0.001, f3, rk2);
 
     std::vector<double> ic2 = { 0,4, 1 };
