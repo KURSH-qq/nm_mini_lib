@@ -478,14 +478,18 @@ public:
     {
         m_font.loadFromFile("C:/Windows/Fonts/Arial.ttf");
         pos_o = sf::Vector2f(0, 500);
-        color = sf::Color::Black;
+        //color = sf::Color::Black;
 
     }
     ~OXY() {}
 
-    void setColor(sf::Color color)
+    void setColor(sf::Color color, int index = -1)
     {
-        this->color = color;
+        if(index == -1)
+            for(size_t i = 0; i < this->color.size();i++ )
+                this->color[i] = color;
+        else
+            this->color[index] = color;
     }
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -551,13 +555,16 @@ public:
             }
         }
 
-        lin[0].color = color;
-        lin[1].color = color;
-        for (size_t i = 0; i < gr.size() - 1; i++)
+        for (size_t i = 0; i < gr.size(); i++)
         {
-            lin[0].position = sf::Vector2f(gr[i].x * pixel_on_x, -gr[i].y * pixel_on_x) + pos_o;
-            lin[1].position = sf::Vector2f(gr[i + 1].x * pixel_on_x, -gr[i + 1].y * pixel_on_x) + pos_o;
-            target.draw(lin, 2, sf::Lines);
+            lin[0].color = color[i];
+            lin[1].color = color[i];
+            for (size_t j = 0; j < gr[i].size() - 1; j++)
+            {
+                lin[0].position = sf::Vector2f(gr[i][j].x * pixel_on_x, -gr[i][j].y * pixel_on_x) + pos_o;
+                lin[1].position = sf::Vector2f(gr[i][j + 1].x * pixel_on_x, -gr[i][j + 1].y * pixel_on_x) + pos_o;
+                target.draw(lin, 2, sf::Lines);
+            }
         }
     }
 
@@ -627,15 +634,19 @@ public:
 
     void add(std::vector<sf::Vector2f> line)
     {
-        gr = line;
+        gr.push_back(line);
+        color.push_back(sf::Color::Black);
     }
 
     void add(std::vector<double> t, std::vector<double> x)
     {
+        std::vector<sf::Vector2f> tmp;
         for (size_t i = 0; i < t.size(); i++)
         {
-            gr.push_back(sf::Vector2f(t[i], x[i]));
+            tmp.push_back(sf::Vector2f(t[i], x[i]));
         }
+        gr.push_back(tmp);
+        color.push_back(sf::Color::Black);
     }
 
 
@@ -644,8 +655,8 @@ private:
     sf::Vector2f pos_o, last_pos;
     double pixel_on_x = 100;
     bool status_r = false, status_l = false;
-    std::vector<sf::Vector2f> gr;
-    sf::Color color;
+    std::vector <std::vector<sf::Vector2f>> gr;
+    std::vector <sf::Color> color;
 };
 
 void graph(std::vector<std::vector<double>> line_)
