@@ -88,7 +88,7 @@ class SDEsolution {
 private:
     double(*f1)(double, double, double, double, double);
     double(*f2)(double, double, double,double,double);
-    double(*methood)(double(*)(double, double,double,double,double), double(*)(double, double, double, double, double),
+    std::vector<double>(*methood)(double(*)(double, double,double,double,double), double(*)(double, double, double, double, double),
         double, double, double, double,double,double);
     double h;
 
@@ -142,7 +142,7 @@ public:
 
     SDEsolution(unsigned int mod, double _E, int _p, int _steps, double _Xr, const std::vector<double>& _ic,
         double _h, double(*_f1)(double, double, double,double,double), double(*_f2)(double, double, double,double,double),
-        double(*_methood)(double(*)(double, double, double,double,double), double(*)(double, double, double, double, double),
+        std::vector<double>(*_methood)(double(*)(double, double, double,double,double), double(*)(double, double, double, double, double),
             double,double,double, double, double, double),
         double _p1 =0, double _p2 =0);
 

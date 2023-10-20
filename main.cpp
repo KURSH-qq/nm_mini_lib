@@ -21,7 +21,7 @@ double f1(double x = 0, double v1 = 0, double v2 = 0, double p1 = 0, double p2 =
     return v2;
 }
 
-double f2(double x = 0, double v2 = 0, double v1 = 0, double p1 = 0, double p2 = 0) {// func sdu(2)
+double f2(double x = 0, double v1 = 0, double v2 = 0, double p1 = 0, double p2 = 0) {// func sdu(2)
     return p1 * v2 * v2 + p2 * sin(v1);
 }
 
@@ -59,12 +59,13 @@ const double p1 = 1, p2 = 1;
 int main()
 {
     std::vector<double> ic = { 0,-1,1 };
-    DEsolution sol1(1, 0.0001, 4, 200, 30, ic, 0.001, right_part, rk4, sd);
-    DEsolution sol2(1, 0.0001, 4, 200, 30, ic, 0.001, f3, rk4);
+    DEsolution sol1(1, 0.0001, 2, 200, 30, ic, 0.001, right_part, rk2, sd);
+    DEsolution sol2(1, 0.0001, 2, 200, 30, ic, 0.001, f3, rk2);
 
     std::vector<double> ic2 = { 0,4, 1 };
-    SDEsolution sol3(1, 0.0001, 2, 200, 30, ic2, -0.001, f1, f2, rk2, 1, 1);
-
+    SDEsolution sol3(1, 0.0001, 2, 2000, -3, ic2, -0.001, f1, f2, rk2, 1, 1);
+    //sol3.print_table();
+    sol3.print_results();
 
 
 

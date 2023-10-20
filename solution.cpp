@@ -312,7 +312,7 @@ std::vector<std::string> DEsolution::get_names() {
 SDEsolution::SDEsolution(unsigned int mod, double _E, int _p, int _steps, double _Xr,
     const std::vector<double>& _ic,
     double _h, double(*_f1)(double, double, double,double,double), double(*_f2)(double, double, double,double,double),
-    double(*_methood)(double(*)(double, double,double,double,double), double(*)(double, double, double, double, double),
+    std::vector<double>(*_methood)(double(*)(double, double,double,double,double), double(*)(double, double, double, double, double),
         double,double, double, double, double,double),
     double _p1, double _p2) {
 
@@ -332,7 +332,6 @@ SDEsolution::SDEsolution(unsigned int mod, double _E, int _p, int _steps, double
     make_table();
 
 }
-
 void SDEsolution::start() {
 
     Xdata.push_back(ic[0]);
@@ -345,17 +344,20 @@ void SDEsolution::start() {
     Ue1data.push_back(0);
     Ue2data.push_back(0);
     Step.push_back(0);
+    std::vector<double> cur_data;
     real_steps = 1;
     int i = 1;
+    
     if (mod_chice == 0) {
-        while (i < steps) {
+        while (i < steps) {           
+            cur_data.clear();
             if (Xdata[i - 1] + h + E < Xr) {
-                
                 real_steps += 1;
-                I.push_back(i);
+                I.push_back(i);              
+                cur_data = methood(f1, f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+                V1data.push_back(cur_data[0]);
+                V2data.push_back(cur_data[1]);
                 Xdata.push_back(Xdata[i - 1] + h);
-                V1data.push_back(methood(f1,f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1],p1,p2));
-                V2data.push_back(methood(f2,f1, h, Xdata[i - 1], V2data[i - 1], V1data[i - 1],p1,p2));
                 Div.push_back(0);
                 Dub.push_back(0);
                 Step.push_back(h);
@@ -367,17 +369,18 @@ void SDEsolution::start() {
             else {
                 break;
             }
-
         }
     }
     else if (mod_chice == 1) {
-        while (i < steps) {
-            if (Xdata[i - 1] + h + E < Xr) {
-                real_steps += 1;
-                I.push_back(i);
+        while (i < steps) {           
+            cur_data.clear();        
+            if ((Xdata[i - 1] + h + E < Xr && Xr>0) || (Xdata[i-1]+h-E>Xr && Xr<0)) { 
+                real_steps += 1;               
+                I.push_back(i);               
+                cur_data = methood(f1, f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+                V1data.push_back(cur_data[0]);
+                V2data.push_back(cur_data[1]);
                 Xdata.push_back(Xdata[i - 1] + h);
-                V1data.push_back(methood(f1,f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1,p2));
-                V2data.push_back(methood(f2,f1, h, Xdata[i - 1], V2data[i - 1], V1data[i - 1],p1,p2));
                 lee(i);
                 Div.push_back(div_count);
                 Dub.push_back(dublicate_count);
@@ -393,33 +396,41 @@ void SDEsolution::start() {
 
 void SDEsolution::lee(int step) {
     int i = step;
-    double ue1, ue2, s;
-    ue1 = methood(f1,f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1],p1,p2);
-    ue1 = methood(f1,f2, h / 2, Xdata[i - 1] + h / 2, ue1, V2data[i - 1],p1,p2);
-    ue2 = methood(f2,f1, h / 2, Xdata[i - 1], V2data[i - 1], V1data[i - 1],p1,p2);
-    ue2 = methood(f2,f1, h / 2, Xdata[i - 1] + h / 2, ue2, V1data[i - 1],p1,p2);
-    s = max(mabs((ue2 - V2data[i]) / (pow(2, p) - 1)), mabs((ue1 - V1data[i]) / (pow(2, p) - 1)));
+    double s;
+    std::vector<double> cur_data1,cur_data, cur_data2;
+    cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+    cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1] + h / 2, cur_data1[0], V2data[i - 1], p1, p2);
+    cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+    cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], cur_data2[1], p1, p2);
+    s = max(mabs((cur_data2[1] - V2data[i]) / (pow(2, p) - 1)), mabs((cur_data1[0] - V1data[i]) / (pow(2, p) - 1)));
     if (mabs(s) < (E / (pow(2, p + 1)))) {
         h *= 2;
         dublicate_count += 1;
     }
     while (mabs(s) > E) {
-        h /= 2;
-        div_count += 1;
-        Xdata[i] = Xdata[i - 1] + h;
-        V1data[i] = methood(f1,f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1],p1,p2);
-        V2data[i] = methood(f2,f1, h, Xdata[i - 1], V2data[i - 1], V1data[i - 1],p1,p2);
-        ue1 = methood(f1,f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1],p1,p2);
-        ue1 = methood(f1,f2, h / 2, Xdata[i - 1] + h / 2, ue1, V2data[i - 1],p1,p2);
-        ue2 = methood(f2,f1, h / 2, Xdata[i - 1], V2data[i - 1], V1data[i - 1],p1,p2);
-        ue2 = methood(f2,f1, h / 2, Xdata[i - 1] + h / 2, ue2, V1data[i - 1],p1,p2);
-        s = max(mabs((ue2 - V2data[i]) / (pow(2, p) - 1)), mabs((ue1 - V1data[i]) / (pow(2, p) - 1)));
+        if ((Xdata[i - 1] + h / 2 + E < Xr && Xr>0) || (Xdata[i - 1] + h / 2 - E > Xr && Xr < 0)) {
+            h /= 2;
+            div_count += 1;
+            Xdata[i] = Xdata[i - 1] + h;
+            cur_data = methood(f1, f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+            V1data[i] = cur_data[0];
+            V2data[i] = cur_data[1];
+            cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+            cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1] + h / 2, cur_data1[0], V2data[i - 1], p1, p2);
+            cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+            cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], cur_data2[1], p1, p2);
+            s = max(mabs((cur_data2[1] - V2data[i]) / (pow(2, p) - 1)), mabs((cur_data1[0] - V1data[i]) / (pow(2, p) - 1)));
+        }
+        else {
+            break;
+        }
     }
-    Ue1data.push_back(ue1);
-    Ue2data.push_back(ue2);
+    Ue1data.push_back(cur_data1[0]);
+    Ue2data.push_back(cur_data2[1]);
     Olp.push_back(s);
     Step.push_back(h);
 }
+
 
 void SDEsolution::make_table() {
     
@@ -451,16 +462,13 @@ std::vector<std::vector<double>> SDEsolution::get_table() {
 }
 
 
-void SDEsolution::print_table() {
-    
-    for (int i = 0; i < real_steps; i++) {
-        
+void SDEsolution::print_table() { 
+    for (int i = 0; i < real_steps; i++) {      
         for (int j = 0; j < table.size(); j++) {
             std::cout << table[j][i] << " ";
         }
         std::cout << std::endl;
     }
-    
 }
 
 void SDEsolution::print_results() {
@@ -473,7 +481,6 @@ void SDEsolution::print_results() {
     std::cout << "min h: " << min(Step) << " x: " << Xdata[find(Step, min(Step))] << std::endl;
     std::cout << "max |v1-v1^|: " << maxabs(Subv1) << " x: " << Xdata[find(Subv1, maxabs(Subv1))] << std::endl; 
     std::cout << "max |v2-v2^|: " << maxabs(Subv2) << " x: " << Xdata[find(Subv2, maxabs(Subv2))] << std::endl;
-
 }
 
 std::vector<std::vector<double>> SDEsolution::get_VX() {
