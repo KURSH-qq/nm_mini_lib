@@ -35,15 +35,17 @@ std::vector<double> rk2(double(*f1)(double, double, double, double, double), dou
 
 std::vector<double> rk4(double(*f1)(double, double, double, double, double), double(*f2)(double, double, double, double, double),
     double h, double preX, double preV1, double preV2, double p1, double p2) {
-    double k11, k12, k13, k14;
-    double k21, k22, k23, k24;
+    double k11, k12, k21, k22, k13, k23, k14, k24;
     std::vector<double> result;
     k11 = f1(preX, preV1, preV2, p1, p2);
     k21 = f2(preX, preV1, preV2, p1, p2);
+
     k12 = f1(preX + 0.5 * h, preV1 + 0.5 * h * k11, preV2 + 0.5 * h * k21, p1, p2);
     k22 = f2(preX + 0.5 * h, preV1 + 0.5 * h * k11, preV2 + 0.5 * h * k21, p1, p2);
+
     k13 = f1(preX + 0.5 * h, preV1 + 0.5 * h * k12, preV2 + 0.5 * h * k22, p1, p2);
     k23 = f2(preX + 0.5 * h, preV1 + 0.5 * h * k12, preV2 + 0.5 * h * k22, p1, p2);
+
     k14 = f1(preX + h, preV1 + h * k13, preV2 + k23 * h, p1, p2);
     k24 = f2(preX + h, preV1 + h * k13, preV2 + k23 * h, p1, p2);
     result.push_back(preV1 + ((k11 + 2 * k12 + 2 * k13 + k14) / 6) * h);

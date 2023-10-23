@@ -27,6 +27,10 @@ inline double max(double d1, double d2) {
     return d2;
 }
 
+inline double norm(double d1, double d2) {
+    return sqrt(d1 * d1 + d2 * d2);
+}
+
 inline double max(const std::vector<double> v) {
     double result = 0;
     for (int i = 0; i < v.size(); i++) {
@@ -396,13 +400,13 @@ void SDEsolution::start() {
 
 void SDEsolution::lee(int step) {
     int i = step;
-    double s;
-    std::vector<double> cur_data1,cur_data, cur_data2;
-    cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
-    cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1] + h / 2, cur_data1[0], V2data[i - 1], p1, p2);
-    cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
-    cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], cur_data2[1], p1, p2);
-    s = max(mabs((cur_data2[1] - V2data[i]) / (pow(2, p) - 1)), mabs((cur_data1[0] - V1data[i]) / (pow(2, p) - 1)));
+    double s,s1,s2;
+    std::vector<double> cur_data,cur_datae;
+    cur_datae = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+    cur_datae = methood(f1, f2, h / 2, Xdata[i - 1] + h / 2, cur_datae[0], cur_datae[1], p1, p2);
+    s1 = (cur_datae[0] - V1data[i]) / (pow(2, p) - 1);
+    s2 = (cur_datae[1] - V2data[i]) / (pow(2, p) - 1);
+    s = norm(mabs(s1),mabs(s2));
     if (mabs(s) < (E / (pow(2, p + 1)))) {
         h *= 2;
         dublicate_count += 1;
@@ -415,18 +419,20 @@ void SDEsolution::lee(int step) {
             cur_data = methood(f1, f2, h, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
             V1data[i] = cur_data[0];
             V2data[i] = cur_data[1];
-            cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
-            cur_data1 = methood(f1, f2, h / 2, Xdata[i - 1] + h / 2, cur_data1[0], V2data[i - 1], p1, p2);
-            cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
-            cur_data2 = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], cur_data2[1], p1, p2);
-            s = max(mabs((cur_data2[1] - V2data[i]) / (pow(2, p) - 1)), mabs((cur_data1[0] - V1data[i]) / (pow(2, p) - 1)));
+            cur_datae = methood(f1, f2, h / 2, Xdata[i - 1], V1data[i - 1], V2data[i - 1], p1, p2);
+            cur_datae = methood(f1, f2, h / 2, Xdata[i - 1]+h/2, cur_datae[0], cur_datae[1], p1, p2);
+
+            s1 = (cur_datae[0] - V1data[i]) / (pow(2, p) - 1);
+            s2 = (cur_datae[1] - V2data[i]) / (pow(2, p) - 1);
+
+            s = norm(mabs(s1), mabs(s2));
         }
         else {
             break;
         }
     }
-    Ue1data.push_back(cur_data1[0]);
-    Ue2data.push_back(cur_data2[1]);
+    Ue1data.push_back(cur_datae[0]);
+    Ue2data.push_back(cur_datae[1]);   
     Olp.push_back(s);
     Step.push_back(h);
 }
