@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 inline double mabs(double d);
-//inline double pow(double d, int p);
 inline double max(double d1, double d2);
 inline double max(const std::vector<double> v);
 inline double min(const std::vector<double> v);
@@ -80,7 +80,7 @@ public:
     void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h,
         const std::vector<double>& _ic);
     void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h, double _ic1, double _ic2);
-    std::vector<double> get_results();
+    std::string get_results();
 };
 
 
@@ -160,5 +160,5 @@ public:
         const std::vector<double>& _ic, double p1, double p2);
     void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h,
         double _ic1, double _ic2, double _ic3, double _p1, double _p2);
-    std::vector<double> get_results();
+    std::string get_results();
 };

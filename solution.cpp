@@ -10,16 +10,6 @@ inline double mabs(double d) {
     }
 }
 
-/*
-inline double pow(double d, int p) {
-    double result = d;
-    for (int i = 0; i < p; i++) {
-        result *= result;
-    }
-    return result;
-}*/
-
-
 inline double max(double d1, double d2) {
     if (d1 > d2) {
         return d1;
@@ -70,8 +60,6 @@ inline int find(const std::vector<double> v, double d) {
     return -1;
 }
 
-
-
 DEsolution::DEsolution(unsigned int mod, double _E, int _p, int _steps, double _Xr,
     const std::vector<double>& _ic, double _h,
     double(*_f)(double, double),
@@ -108,8 +96,7 @@ void DEsolution::start() {
     
     int i = 1;
     real_steps = 1;
-    if (mod_choice == 0) {
-        
+    if (mod_choice == 0) {     
         while (i < steps) {
             if (Xdata[i - 1] + h + E < Xr) {
                 real_steps += 1;
@@ -135,8 +122,7 @@ void DEsolution::start() {
         }
     }
 
-    else if (mod_choice == 1) {
-        
+    else if (mod_choice == 1) {     
         while (i < steps) {
             if (Xdata[i - 1] + h + E < Xr) {
                 real_steps += 1;
@@ -161,10 +147,8 @@ void DEsolution::start() {
             else {
                 break;
             }
-        }
-        
+        }   
     }
-    
 }
 
 void DEsolution::lee(int step) {
@@ -193,7 +177,6 @@ void DEsolution::lee(int step) {
     Step.push_back(h);
     Olp.push_back(s);
 }
-
 
 void DEsolution::make_table() {
     
@@ -313,20 +296,18 @@ std::vector<std::string> DEsolution::get_names() {
     return names;
 }
 
-std::vector<double> DEsolution::get_results() {
-    std::vector<double> results;
-    results.push_back(I.back());
-    results.push_back(Xr - Xdata.back());
-    results.push_back(maxabs(Olp));
-    results.push_back(dublecate_count);
-    results.push_back(div_count);
-    results.push_back(max(Step));
-    results.push_back(Xdata[find(Step, max(Step))]);
-    results.push_back(min(Step));
-    results.push_back(Xdata[find(Step, min(Step))]);
-    results.push_back(maxabs(Subuv));
-    results.push_back(Xdata[find(Subuv, maxabs(Subuv))]);
-    return results;
+std::string DEsolution::get_results() {
+    std::ostringstream sstream;
+    sstream<< "max n = " << I.back() << std::endl;
+    sstream<< "b - xn = " << Xr - Xdata.back() << std::endl;
+    sstream<< "max|OLP| = " << maxabs(Olp) << std::endl;
+    sstream<< "dublicates: " << dublecate_count << std::endl;
+    sstream<< "divs: " << div_count << std::endl;
+    sstream<< "max h: " << max(Step) << " x: " << Xdata[find(Step, max(Step))] << std::endl;
+    sstream<< "min h: " << min(Step) << " x: " << Xdata[find(Step, min(Step))] << std::endl;
+    sstream<< "max |u-v|: " << maxabs(Subuv) << " x: " << Xdata[find(Subuv, maxabs(Subuv))] << std::endl;
+    return sstream.str();
+
 }
 
 SDEsolution::SDEsolution(unsigned int mod, double _E, int _p, int _steps, double _Xr,
@@ -352,6 +333,7 @@ SDEsolution::SDEsolution(unsigned int mod, double _E, int _p, int _steps, double
     make_table();
 
 }
+
 void SDEsolution::start() {
 
     Xdata.push_back(ic[0]);
@@ -413,7 +395,6 @@ void SDEsolution::start() {
     }
 }
 
-
 void SDEsolution::lee(int step) {
     int i = step;
     double s,s1,s2;
@@ -453,7 +434,6 @@ void SDEsolution::lee(int step) {
     Step.push_back(h);
 }
 
-
 void SDEsolution::make_table() {
     
     for (int i = 0; i < real_steps; i++) {
@@ -482,7 +462,6 @@ void SDEsolution::make_table() {
 std::vector<std::vector<double>> SDEsolution::get_table() {
     return table;
 }
-
 
 void SDEsolution::print_table() { 
     for (int i = 0; i < real_steps; i++) {      
@@ -581,21 +560,18 @@ std::vector<std::string> SDEsolution::get_names() {
     return names;
 }
 
+std::string SDEsolution::get_results() {
+    std::ostringstream sstream;
 
-std::vector<double> SDEsolution::get_results() {
-    std::vector<double> results;
-    results.push_back(I.back());
-    results.push_back(Xr - Xdata.back());
-    results.push_back(maxabs(Olp));
-    results.push_back(dublicate_count);
-    results.push_back(div_count);
-    results.push_back(max(Step));
-    results.push_back(Xdata[find(Step, max(Step))]);
-    results.push_back(min(Step));
-    results.push_back(Xdata[find(Step, min(Step))]);
-    results.push_back(maxabs(Subv1));
-    results.push_back(Xdata[find(Subv1, maxabs(Subv1))]);
-    results.push_back(maxabs(Subv2));
-    results.push_back(Xdata[find(Subv2, maxabs(Subv2))]);
-    return results;
+    sstream<< "max n = " << I.back() << std::endl;
+    sstream<< "b - xn = " << Xr - Xdata.back() << std::endl;
+    sstream<< "max|OLP| = " << maxabs(Olp) << std::endl;
+    sstream<< "dublicates: " << dublicate_count << std::endl;
+    sstream<< "divs: " << div_count << std::endl;
+    sstream<< "max h: " << max(Step) << " x: " << Xdata[find(Step, max(Step))] << std::endl;
+    sstream<< "min h: " << min(Step) << " x: " << Xdata[find(Step, min(Step))] << std::endl;
+    sstream<< "max |v1-v1^|: " << maxabs(Subv1) << " x: " << Xdata[find(Subv1, maxabs(Subv1))] << std::endl;
+    sstream<< "max |v2-v2^|: " << maxabs(Subv2) << " x: " << Xdata[find(Subv2, maxabs(Subv2))] << std::endl;
+
+    return sstream.str();
 }

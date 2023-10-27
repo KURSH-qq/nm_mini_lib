@@ -65,8 +65,9 @@ int main()
     std::vector<double> ic2 = { 0,4, 1 };
     SDEsolution sol3(1, 0.001, 4, 10, 10, ic2, 0.001, f1, f2, rk4, 1, 1);
     //sol3.print_table();
-    sol3.print_results();
-    sol3.print_table();
+    //sol3.print_results();
+    //sol3.print_table();
+    
 
 
 
