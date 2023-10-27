@@ -7,10 +7,10 @@
 class TextField : public sf::Transformable, public sf::Drawable
 {
 public:
-    TextField(unsigned int maxChars = 10, unsigned int charSize = 15) :
+    TextField(unsigned int maxChars = 15, unsigned int charSize = 15) :
         m_size(maxChars),
         char_size(charSize),
-        m_rect(sf::Vector2f(15 * m_size, 20)),
+        m_rect(sf::Vector2f(12 * m_size, 20)),
         m_hasfocus(false)
     {
         m_font.loadFromFile("C:/Windows/Fonts/Arial.ttf");

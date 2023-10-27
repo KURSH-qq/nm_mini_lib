@@ -71,6 +71,16 @@ int main()
 
 
 
+    sf::Text text_table;
+    sf::Font m_font;
+    m_font.loadFromFile("C:/Windows/Fonts/Arial.ttf");
+    text_table.setFont(m_font);
+    text_table.setString(" ");
+    text_table.setCharacterSize(15);
+    text_table.setFillColor(sf::Color::Black);
+    
+
+
     sf::RenderWindow window({ 1200, 500 }, "SFML", sf::Style::Close);
     Button f1, f2, f3;
 
@@ -100,6 +110,12 @@ int main()
     pos.x += Xr.getSize().x + 15;
     steps.setPosition(pos);
     steps.setName(sf::String(L"steps"));
+
+
+    pos = steps.getPosition();
+    pos.x += steps.getSize().x + 25;
+    pos.y -= 50;
+    text_table.setPosition(pos);
 
     pos = E.getPosition();
     pos.y += E.getSize().y + 25;
@@ -210,12 +226,14 @@ int main()
                             sol1.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue());
                             table.setNames(sol1.get_names());
                             table.setData(transpose(sol1.get_table()));
+                            text_table.setString(sol1.get_results());
                         }
                         if (f2.isReady())
                         {
                             sol2.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue());
                             table.setNames(sol2.get_names());
                             table.setData(transpose(sol2.get_table()));
+                            text_table.setString(sol2.get_results());
                         }
                         ready = true;
                     }
@@ -226,6 +244,7 @@ int main()
                             sol3.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue(), v_1.getValue(), p1, p2);
                             table.setNames(sol3.get_names());
                             table.setData(transpose(sol3.get_table()));
+                            text_table.setString(sol3.get_results());
                         }
                         ready = true;
                     }
@@ -314,6 +333,7 @@ int main()
             window.draw(x);
             window.draw(steps);
             window.draw(button_calc);
+            window.draw(text_table);
 
             if (ready)
             {
