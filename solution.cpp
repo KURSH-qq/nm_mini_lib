@@ -313,6 +313,22 @@ std::vector<std::string> DEsolution::get_names() {
     return names;
 }
 
+std::vector<double> DEsolution::get_results() {
+    std::vector<double> results;
+    results.push_back(I.back());
+    results.push_back(Xr - Xdata.back());
+    results.push_back(maxabs(Olp));
+    results.push_back(dublecate_count);
+    results.push_back(div_count);
+    results.push_back(max(Step));
+    results.push_back(Xdata[find(Step, max(Step))]);
+    results.push_back(min(Step));
+    results.push_back(Xdata[find(Step, min(Step))]);
+    results.push_back(maxabs(Subuv));
+    results.push_back(Xdata[find(Subuv, maxabs(Subuv))]);
+    return results;
+}
+
 SDEsolution::SDEsolution(unsigned int mod, double _E, int _p, int _steps, double _Xr,
     const std::vector<double>& _ic,
     double _h, double(*_f1)(double, double, double,double,double), double(*_f2)(double, double, double,double,double),
@@ -563,4 +579,23 @@ void SDEsolution::set_params(unsigned int _mod, double _E, int _steps, double _X
 
 std::vector<std::string> SDEsolution::get_names() {
     return names;
+}
+
+
+std::vector<double> SDEsolution::get_results() {
+    std::vector<double> results;
+    results.push_back(I.back());
+    results.push_back(Xr - Xdata.back());
+    results.push_back(maxabs(Olp));
+    results.push_back(dublicate_count);
+    results.push_back(div_count);
+    results.push_back(max(Step));
+    results.push_back(Xdata[find(Step, max(Step))]);
+    results.push_back(min(Step));
+    results.push_back(Xdata[find(Step, min(Step))]);
+    results.push_back(maxabs(Subv1));
+    results.push_back(Xdata[find(Subv1, maxabs(Subv1))]);
+    results.push_back(maxabs(Subv2));
+    results.push_back(Xdata[find(Subv2, maxabs(Subv2))]);
+    return results;
 }
