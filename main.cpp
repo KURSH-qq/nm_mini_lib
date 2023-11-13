@@ -8,7 +8,7 @@
 
 
 
-double right_part(double x = 0, double u = 0) { // func 1
+double right_part(double x = 0, double u = 0,double p1 = 0,double p2 = 0) { // func 1
     return -2.5 * u;
 }
 
@@ -25,10 +25,12 @@ double f2(double x = 0, double v1 = 0, double v2 = 0, double p1 = 0, double p2 =
     return p1 * v2 * v2 + p2 * sin(v1);
 }
 
-double f3(double x = 0, double u = 0) { // func 2
+double f3(double x = 0, double u = 0,double p1 = 0,double p2 =0) { // func 2
     double f = (log(x + 1)) / (x * x + 1);
     return f * u * u + u - u * u * u * sin(10 * x);
 }
+
+
 
 
 std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> vector)
@@ -59,7 +61,7 @@ const double p1 = 1, p2 = 1;
 int main()
 {
     std::vector<double> ic = { 0,-1,1 };
-    DEsolution sol1(1, 0.0001, 4, 200, 30, ic, 0.001, right_part, rk4, sd);
+    DEsolution sol1(1, 0.0001, 4, 200, 30, ic, 0.001, right_part, rk4,1,1, sd);
     DEsolution sol2(1, 0.0001, 4, 200, 30, ic, 0.001, f3, rk4);
 
     std::vector<double> ic2 = { 0,4, 1 };

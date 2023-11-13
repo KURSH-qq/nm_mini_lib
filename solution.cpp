@@ -62,9 +62,9 @@ inline int find(const std::vector<double> v, double d) {
 
 DEsolution::DEsolution(unsigned int mod, double _E, int _p, int _steps, double _Xr,
     const std::vector<double>& _ic, double _h,
-    double(*_f)(double, double),
-    double(*_methood)(double(*)(double, double),
-        double, double, double), double(*_solved_du)(double, std::vector<double>)) {
+    double(*_f)(double, double,double,double),
+    double(*_methood)(double(*)(double, double,double,double),
+        double, double, double,double,double),double _p1,double _p2, double(*_solved_du)(double, std::vector<double>)) {
     
     h = _h;
     f = _f;
@@ -76,6 +76,8 @@ DEsolution::DEsolution(unsigned int mod, double _E, int _p, int _steps, double _
     steps = _steps;
     solved_du = _solved_du;
     ic = _ic;
+    p1 = _p1;
+    p2 = _p2;
     
     start();  
     
@@ -102,7 +104,7 @@ void DEsolution::start() {
                 real_steps += 1;
                 I.push_back(i);
                 Xdata.push_back(Xdata[i - 1] + h);
-                V1data.push_back(methood(f, h, Xdata[i - 1], V1data[i - 1]));
+                V1data.push_back(methood(f, h, Xdata[i - 1], V1data[i - 1],p1,p2));
                 Dub.push_back(0);
                 Div.push_back(0);
                 Step.push_back(h);
@@ -128,7 +130,7 @@ void DEsolution::start() {
                 real_steps += 1;
                 I.push_back(i);
                 Xdata.push_back(Xdata[i - 1] + h);
-                V1data.push_back(methood(f, h, Xdata[i - 1], V1data[i - 1]));
+                V1data.push_back(methood(f, h, Xdata[i - 1], V1data[i - 1],p1,p2));
                 
                 lee(i);
                 
@@ -155,8 +157,8 @@ void DEsolution::lee(int step) {
     int i = step;
     double ue;
     double s;
-    ue = methood(f, h / 2, Xdata[i - 1], V1data[i - 1]);
-    ue = methood(f, h / 2, Xdata[i - 1] + (h / 2), ue);
+    ue = methood(f, h / 2, Xdata[i - 1], V1data[i - 1],p1,p2);
+    ue = methood(f, h / 2, Xdata[i - 1] + (h / 2), ue,p1,p2);
     s = (ue - V1data[i]) / (pow(2, p) - 1);
     if (mabs(s) < (E / (pow(2, p + 1)))) {
         h *= 2;
@@ -166,9 +168,9 @@ void DEsolution::lee(int step) {
         h /= 2;
         div_count += 1;
         Xdata[i] = Xdata[i - 1] + h;
-        V1data[i] = methood(f, h, Xdata[i - 1], V1data[i - 1]);
-        ue = methood(f, h / 2, Xdata[i - 1], V1data[i - 1]);
-        ue = methood(f, h / 2, Xdata[i - 1] + (h / 2), ue);
+        V1data[i] = methood(f, h, Xdata[i - 1], V1data[i - 1],p1,p2);
+        ue = methood(f, h / 2, Xdata[i - 1], V1data[i - 1],p1,p2);
+        ue = methood(f, h / 2, Xdata[i - 1] + (h / 2), ue,p1,p2);
         s = (ue - V1data[i]) / (pow(2, p) - 1);
 
     }

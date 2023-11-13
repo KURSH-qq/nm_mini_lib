@@ -5,20 +5,20 @@ double em(double(*f1)(double, double,double,double,double), double(*f2)(double, 
     return preV1 + h * f1(preX, preV1, preV2, p1, p2);
 }
 
-double em(double(*rp)(double, double), double h, double preX, double preV) {
-    return preV + h * rp(preX, preV);
+double em(double(*rp)(double, double,double,double), double h, double preX, double preV,double p1,double p2) {
+    return preV + h * rp(preX, preV,p1,p2);
 }
 
-double rk2(double(*rp)(double, double), double h, double preX, double preV1) {
-    return preV1 + 0.5 * h * (rp(preX,preV1)+rp(preX+h,preV1+h*rp(preX,preV1)));
+double rk2(double(*rp)(double, double,double,double), double h, double preX, double preV1,double p1, double p2) {
+    return preV1 + 0.5 * h * (rp(preX,preV1,p1,p2)+rp(preX+h,preV1+h*rp(preX,preV1,p1,p2),p1,p2));
 }
 
-double rk4(double(*rp)(double, double), double h, double preX, double preV1) {
+double rk4(double(*rp)(double, double, double, double), double h, double preX, double preV1,double p1, double p2) {
     double k1, k2, k3, k4;
-    k1 = rp(preX, preV1);
-    k2 = rp(preX + 0.5 * h, preV1 + 0.5 * h * k1);
-    k3 = rp(preX + 0.5 * h, preV1 + 0.5 * h * k2);
-    k4 = rp(preX + h, preV1 +  h * k3);
+    k1 = rp(preX, preV1,p1,p2);
+    k2 = rp(preX + 0.5 * h, preV1 + 0.5 * h * k1,p1,p2);
+    k3 = rp(preX + 0.5 * h, preV1 + 0.5 * h * k2,p1,p2);
+    k4 = rp(preX + h, preV1 +  h * k3,p1,p2);
     return preV1 +   ((k1 + 2 * k2 + 2 * k3 + k4)/6)* h;
 }
 

@@ -13,10 +13,11 @@ inline int find(const std::vector<double> v, double d);
 class DEsolution {
 private:
 
-    double(*f)(double, double);
-    double(*methood)(double(*)(double, double), double, double, double);
+    double(*f)(double, double,double,double);
+    double(*methood)(double(*)(double, double,double,double), double, double, double,double,double);
     double(*solved_du)(double, std::vector<double>);
     double h;
+    double p1, p2;
 
     std::vector<double> ic;
     std::vector<double> Xdata; 
@@ -65,8 +66,8 @@ public:
 
     DEsolution(unsigned int mod, double _E,int _p,int _steps, double _Xr,
         const std::vector<double>& _ic, double _h,
-        double(*_f)(double, double),
-        double(*_methood)(double(*)(double, double),double, double, double),
+        double(*_f)(double, double,double,double),
+        double(*_methood)(double(*)(double, double,double,double),double, double, double,double,double), double _p1 = 0, double _p2 = 0,
         double(* _solved_du)(double,std::vector<double>) = nullptr);
 
 
