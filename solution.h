@@ -79,8 +79,8 @@ public:
 
     std::vector<std::string> get_names();
     void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h,
-        const std::vector<double>& _ic);
-    void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h, double _ic1, double _ic2);
+        const std::vector<double>& _ic, double _p1, double _p2);
+    void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h, double _ic1, double _ic2, double _p1, double _p2);
     std::string get_results();
 };
 
@@ -162,4 +162,10 @@ public:
     void set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h,
         double _ic1, double _ic2, double _ic3, double _p1, double _p2);
     std::string get_results();
+};
+
+
+class SSDEsolution {
+private:
+public:
 };

@@ -245,7 +245,7 @@ std::vector<std::vector<double>> DEsolution::get_VX() {
 }
 
 void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h,
-    const std::vector<double>& _ic) {
+    const std::vector<double>& _ic,double _p1, double _p2) {
     Xdata.clear();
     Udata.clear();
     V1data.clear();
@@ -263,13 +263,15 @@ void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr
     Xr = _Xr;
     h = _h;
     ic = _ic;
+    p1 = _p1;
+    p2 = _p2;
     dublecate_count = 0;
     div_count = 0;
     start();
     make_table();
 }
 
-void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h, double _ic1, double _ic2) {
+void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr, double _h, double _ic1, double _ic2,double _p1, double _p2) {
     Xdata.clear();
     Udata.clear();
     V1data.clear();
@@ -288,6 +290,8 @@ void DEsolution::set_params(unsigned int _mod, double _E, int _steps, double _Xr
     h = _h;
     ic[0] = _ic1;
     ic[1] = _ic2;
+    p1 = _p1;
+    p2 = _p2;
     dublecate_count = 0;
     div_count = 0;
     start();

@@ -61,11 +61,11 @@ const double p1 = 1, p2 = 1;
 int main()
 {
     std::vector<double> ic = { 0,-1,1 };
-    DEsolution sol1(1, 0.0001, 4, 200, 30, ic, 0.001, right_part, rk4,1,1, sd);
+    DEsolution sol1(1, 0.0001, 4, 200, 30, ic, 0.001, right_part, rk4,p1,p2, sd);
     DEsolution sol2(1, 0.0001, 4, 200, 30, ic, 0.001, f3, rk4);
 
     std::vector<double> ic2 = { 0,4, 1 };
-    SDEsolution sol3(1, 0.001, 4, 10, 10, ic2, 0.001, f1, f2, rk4, 1, 1);
+    SDEsolution sol3(1, 0.001, 4, 10, 10, ic2, 0.001, f1, f2, rk4, p1, p2);
     //sol3.print_table();
     //sol3.print_results();
     //sol3.print_table();
