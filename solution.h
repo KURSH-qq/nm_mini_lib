@@ -167,5 +167,7 @@ public:
 
 class SSDEsolution {
 private:
+    std::vector<std::vector<double>> m;
+
 public:
 };

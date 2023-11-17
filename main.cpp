@@ -225,14 +225,14 @@ int main()
                     {
                         if (f1.isReady())
                         {
-                            sol1.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue());
+                            sol1.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue(),p1,p2);
                             table.setNames(sol1.get_names());
                             table.setData(transpose(sol1.get_table()));
                             text_table.setString(sol1.get_results());
                         }
                         if (f2.isReady())
                         {
-                            sol2.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue());
+                            sol2.set_params(b1.isReady(), E.getValue(), steps.getValue(), Xr.getValue(), h1.getValue(), x.getValue(), v.getValue(),p1,p2);
                             table.setNames(sol2.get_names());
                             table.setData(transpose(sol2.get_table()));
                             text_table.setString(sol2.get_results());
